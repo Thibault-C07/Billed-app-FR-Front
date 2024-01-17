@@ -159,8 +159,8 @@ export default class {
         this.handleEditTicket(e, bill, bills)
       ); */
       // Fix dashboard
-      $(`#status-bills-container${this.index} #open-bill${bill.id}`).click(
-        (e) => this.handleEditTicket(e, bill, bills)
+      $(`#status-bills-container${index} #open-bill${bill.id}`).click((e) =>
+        this.handleEditTicket(e, bill, bills)
       );
     });
 

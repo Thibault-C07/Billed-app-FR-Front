@@ -26,7 +26,7 @@ export default () => {
                   </div>
                   <div class="col-half">
                     <label for="expense-name" class="bold-label">Nom de la dépense</label>
-                    <input required type="text" class="form-control blue-border" data-testid="expense-name" placeholder="Vol Paris Londres" />
+                    <input type="text" class="form-control blue-border" data-testid="expense-name" placeholder="Vol Paris Londres" />
                   </div>
                   <div class="col-half">
                     <label for="datepicker" class="bold-label">Date</label>
@@ -54,8 +54,8 @@ export default () => {
                   </div>
                   <div class="col-half">
                     <label for="file" class="bold-label">Justificatif</label>
-                    <input required type="file" accept=".jpg, .jpeg, .png" class="form-control blue-border" data-testid="file" />
-                    <small class="form-text text-muted">Formats acceptés : .jpg, .jpeg, .png</small>
+                    <input required type="file" class="form-control blue-border" data-testid="file" />
+                    <span class="error-format" hidden>Format non accepté, merci de choisir un fichier au format jpg, jpeg ou png</span>
                   </div>
                 </div>
             </div>

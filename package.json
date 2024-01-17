@@ -15,6 +15,7 @@
       "!**/fixtures/**",
       "!**/lcov-report/**"
     ]
+
   },
   "type": "module",
   "dependencies": {
