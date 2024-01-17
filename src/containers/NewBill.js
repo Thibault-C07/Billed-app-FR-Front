@@ -23,42 +23,35 @@ export default class NewBill {
       .files[0];
     const filePath = e.target.value.split(/\\/g);
     const fileName = filePath[filePath.length - 1];
-    const fileExtension = fileName.split(".").pop();
     const formData = new FormData();
     const email = JSON.parse(localStorage.getItem("user")).email;
+
+    const authorizedType = ["image/jpeg", "image/jpg", "image/png"];
+
+    if (!authorizedType.includes(file.type)) {
+      console.error("wrong extension");
+      this.document.querySelector(`input[data-testid="file"]`).value = "";
+      return;
+    }
+
     formData.append("file", file);
     formData.append("email", email);
 
-    // If file is an image
-    if (
-      fileExtension === "jpg" ||
-      fileExtension === "jpeg" ||
-      fileExtension === "png"
-    ) {
-      // Hide error message if it was displayed
-      const errorFormat = this.document.querySelector(".error-format");
-      errorFormat && errorFormat.setAttribute("hidden", true);
-
-      this.store
-        .bills()
-        .create({
-          data: formData,
-          headers: {
-            noContentType: true,
-          },
-        })
-        .then(({ fileUrl, key }) => {
-          console.log(fileUrl);
-          this.billId = key;
-          this.fileUrl = fileUrl;
-          this.fileName = fileName;
-        })
-        .catch((error) => console.error(error));
-    } else {
-      // Show error message & empty file input
-      this.document.querySelector(".error-format").hidden = false;
-      this.document.querySelector(`input[data-testid="file"]`).value = "";
-    }
+    this.store
+      .bills()
+      .create({
+        data: formData,
+        headers: {
+          noContentType: true,
+        },
+      })
+      .then(({ fileUrl, key }) => {
+        console.log(fileUrl);
+        this.billId = key;
+        this.fileUrl = fileUrl;
+        this.fileName = fileName;
+      })
+      .catch((error) => console.error(error));
   };
 
   handleSubmit = (e) => {
