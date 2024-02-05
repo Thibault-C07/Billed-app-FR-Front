@@ -4,11 +4,13 @@
 
 import NewBill from "../containers/NewBill.js";
 
+/* Vérification si l'e-mail de l'utilisateur est correctement sauvegardé lorsqu'il télécharge un fichier avec le bon format sur la page NewBill */
+
 describe("Given I am connected as an employee", () => {
   describe("When I am on NewBill Page", () => {
     describe("when uploading a file with the correct format", () => {
       test("should save the user's email", () => {
-        // Mocking functions and data
+        // Succession de simulations des données
         const mockGetElementById = jest.fn().mockReturnValue({});
         const createMock = jest
           .fn()
@@ -31,10 +33,10 @@ describe("Given I am connected as an employee", () => {
           getElementById: mockGetElementById,
         };
 
-        // Set up localStorage
+        // Configuration du local storage
         localStorage.setItem("user", '{"email" : "user@email.com"}');
 
-        // Setting up test instance
+        // Création d'une instance avec des objets et fonctions simulés
         const storeMock = {
           bills: () => ({
             create: createMock,
@@ -47,7 +49,7 @@ describe("Given I am connected as an employee", () => {
           localStorage: {},
         });
 
-        // Triggering file upload
+        // Simulation du téléchargement d'un fichier
         objInstance.handleChangeFile({
           preventDefault: jest.fn(),
           target: { value: "image.png" },
@@ -62,9 +64,10 @@ describe("Given I am connected as an employee", () => {
       });
     });
 
+    /* Vérification si les bonnes données sont envoyées lorsque l'utilisateur soumet le formulaire de la page NewBill.*/
     describe("when submitting a new bill", () => {
       test("should call the update method on the store", () => {
-        // Mocking functions and data
+        // Succession de simulations des données
         const mockGetElementById = jest.fn().mockReturnValue({});
         const createMock = jest.fn();
         const goodFormatFile = new File(["img"], "image.png", {
@@ -90,7 +93,7 @@ describe("Given I am connected as an employee", () => {
           }),
         };
 
-        // Setting up test instance
+        // Création d'une instance avec des objets et fonctions simulés
         const objInstance = new NewBill({
           document: documentMock,
           onNavigate: jest.fn(),
@@ -98,7 +101,7 @@ describe("Given I am connected as an employee", () => {
           localStorage: {},
         });
 
-        // Triggering form submission
+        // Simulation de l'envoie du formulaire
         objInstance.handleSubmit({
           preventDefault: jest.fn(),
           target: {
@@ -138,7 +141,7 @@ describe("Given I am connected as an employee", () => {
           status: "pending",
         };
 
-        // Analyzing the data passed to the function
+        // Analyse des données pour les convertir en objet Javascript
         const data = JSON.parse(mockUpdate.mock.calls[0][0].data);
         console.log("data?", data);
 

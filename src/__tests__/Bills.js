@@ -48,6 +48,10 @@ describe("Given I am connected as an employee", () => {
       const datesSorted = [...dates].sort(antiChrono);
       expect(dates).toEqual(datesSorted);
     });
+
+    /* Test unitaire pour vérifier le comportement attendu des deux boutons "Nouvelle facture" et "Icone oeil"*/
+
+    // Nouvelle facture
     describe("When I click on new bill button", () => {
       test("Then I should be sent on the new bill page", () => {
         Object.defineProperty(window, "localStorage", {
@@ -58,6 +62,7 @@ describe("Given I am connected as an employee", () => {
           JSON.stringify({ type: "Employee" })
         );
         document.body.innerHTML = BillsUI({ data: bills });
+        // fonction de navigation qui simule la navigation vers une nouvelle page
         const onNavigate = (pathname) => {
           document.body.innerHTML = ROUTES({ pathname });
         };
@@ -67,13 +72,21 @@ describe("Given I am connected as an employee", () => {
           localStorage: window.localStorage,
           store: null,
         });
+
+        // Récupération du bouton "Nouvelle facture"
         const btnNewBill = screen.getByTestId("btn-new-bill");
+
+        // Fonction de gestion d'événements qui simulée
         const handleClickNewBill = jest.fn(newBills.handleClickNewBill);
+        // ajout d'un écouteur d'événements pour le clic sur le bouton "Nouvelle facture"
         btnNewBill.addEventListener("click", handleClickNewBill);
         fireEvent.click(btnNewBill);
+        // vérification si la fonction handleClickNewBill a été appelée lors du clic sur le bouton
         expect(handleClickNewBill).toHaveBeenCalled();
       });
     });
+
+    // Icone oeil
     describe("When I click on first eye icon", () => {
       test("Then modal should open", () => {
         Object.defineProperty(window, localStorage, {
@@ -84,6 +97,7 @@ describe("Given I am connected as an employee", () => {
           JSON.stringify({ type: "Employee" })
         );
         document.body.innerHTML = BillsUI({ data: bills });
+        // fonction de navigation qui simule la navigation vers une nouvelle page
         const onNavigate = (pathname) => {
           document.body.innerHTML = ROUTES({ pathname });
         };
@@ -97,9 +111,11 @@ describe("Given I am connected as an employee", () => {
         const handleClickIconEye = jest.fn(() => {
           newBills.handleClickIconEye;
         });
+        // ajout d'un écouteur d'événements au clic sur le premier icône "Œil".
         const firstEyeIcon = screen.getAllByTestId("icon-eye")[0];
         firstEyeIcon.addEventListener("click", handleClickIconEye);
         fireEvent.click(firstEyeIcon);
+        // vérification si la fonction handleClickIconEye et $.fn.modal ont été appelée lors du clic sur l'icone oeil
         expect(handleClickIconEye).toHaveBeenCalled();
         expect($.fn.modal).toHaveBeenCalled();
       });
@@ -110,7 +126,9 @@ describe("Given I am connected as an employee", () => {
 // Test integration GET
 describe("Given I am connected as an employee", () => {
   describe("When I am on Bills Page", () => {
+    // vérification que les factures sont récupérées avec succès depuis une API
     test("fetches bills from mock API GET", async () => {
+      // Simulation stockage local
       localStorage.setItem(
         "user",
         JSON.stringify({ type: "Employee", email: "a@a" })
@@ -120,12 +138,14 @@ describe("Given I am connected as an employee", () => {
       document.body.append(root);
       router();
       window.onNavigate(ROUTES_PATH.Bills);
+      // Affichage de "Mes notes de frais"
       expect(
         await waitFor(() => screen.getByText("Mes notes de frais"))
       ).toBeTruthy();
     });
   });
 
+  // contexte dans lequel une erreur se produit lors de l'appel à l'API
   describe("When an error occurs on API", () => {
     beforeEach(() => {
       jest.spyOn(mockStore, "bills");
@@ -142,6 +162,9 @@ describe("Given I am connected as an employee", () => {
       router();
     });
 
+    // Tests qui permettent de s'assurer que l'application gère correctement les erreurs provenant de l'API
+
+    // Simulation erreur 404
     test("Then fails with 404 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return { list: () => Promise.reject(new Error("Erreur 404")) };
@@ -152,6 +175,7 @@ describe("Given I am connected as an employee", () => {
       expect(message).toBeTruthy();
     });
 
+    // Simulation erreur 500
     test("Then fails with 500 message error", async () => {
       mockStore.bills.mockImplementationOnce(() => {
         return { list: () => Promise.reject(new Error("Erreur 500")) };
